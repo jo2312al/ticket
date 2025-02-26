@@ -10,35 +10,33 @@
 </head>
 <body>
     <header>
-        <h1>Bienvenido, espere su turno, por favor!!</h1>
+        <h1>Bienvenido, Buena suerte en tu turno!!</h1>
       </header>
     
       <div class="container">
         <div class="lista">
             <h1>
-                Siguientes en la fila 
+                Fila 
             </h1>
             <ul id="listaTickets"></ul>  
         </div>  
     
         <div class="grid-container">
             <div class="content">
-                <h1>Puede pasar a la Caja 1 :</h1>
-                <h1 id="caja1"></h1>
+                <h1>Presione si ya termino el turno</h1>
+                <button class="btn atendido" onclick="actualizarCaja()">Atendido</button>
             </div>
             <div class="content">
-                <h1>Puede pasar a la Caja 2:</h1>
-                <h1 id="caja2"></h1>
+                <h1>Presione para el siguiente cliente</h1>
+                <button class="btn siguiente" onclick="cambiarEstadoSiguiente()">Siguiente</button>
             </div>
             <div class="content">
-                <h1>Puede pasar a la Caja 3:</h1>
-
-                <h1 id="caja3"></h1>
+                <h1>Presione por si no llego el cliente</h1>
+                <button class="btn no-llego" onclick="actualizarCaja()">No Llegó</button>
             </div>
             <div class="content">
-                <h1>Puede pasar a la Caja 4:</h1>
-    
-                <h1 id="caja4"></h1>
+                <h1>Termina tu turno en caja </h1>
+                <button class="btn terminar">Terminar</button>
             </div>            
     </div>
     <script>
