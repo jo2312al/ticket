@@ -1,5 +1,5 @@
 <?php
-$servernme = "localhost";
+$servername = "localhost";
 $username = "root";  
 $password = "";     
 $dbname = "sistema_tickets";

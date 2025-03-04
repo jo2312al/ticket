@@ -51,23 +51,44 @@ function cargarCajas() {
         }
     });
 }
+function obtenerParametroURL(nombre) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(nombre);
+}
+
 function actualizarCaja() {
+    let usuario = obtenerParametroURL("usuario");
+
+    if (!usuario) {
+        alert("No se encontró el parámetro 'usuario' en la URL.");
+        return;
+    }
+
+  
+    let caja_id = usuario.replace(/\D/g, "");
+    if (!caja_id) {
+        alert("No se pudo obtener un ID de caja válido.");
+        return;
+    }
+
+    const estado_id = parseInt(caja_id)+2; 
+    const nuevo_estado = 2;
+
     fetch("actualizar_caja.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            estado_id: 3,
-            nuevo_estado: 2,
-            caja_id: 1
+            estado_id: estado_id,
+            nuevo_estado: nuevo_estado,
+            caja_id: parseInt(caja_id)  
         })
     })
     .then(response => response.json())  
     .then(data => {
         if (data.success) {
             alert("La caja ha sido actualizada.");
-            
         } else {
             alert("Hubo un error al actualizar la caja.");
         }
@@ -77,7 +98,22 @@ function actualizarCaja() {
         alert("Hubo un error en la solicitud.");
     });
 }
+
 function cambiarEstadoSiguiente() {
+
+    let usuario = obtenerParametroURL("usuario");
+
+    if (!usuario) {
+        alert("No se encontró el parámetro 'usuario' en la URL.");
+        return;
+    }
+
+  
+    let caja_id = usuario.replace(/\D/g, "");
+    if (!caja_id) {
+        alert("No se pudo obtener un ID de caja válido.");
+        return;
+    }
 
     fetch("cambiar_estado_siguiente.php", {
         method: "POST",
@@ -86,7 +122,7 @@ function cambiarEstadoSiguiente() {
         },
         body: JSON.stringify({
             estado_id_actual: 1,
-            estado_id_nuevo: 3
+            estado_id_nuevo: parseInt(caja_id)+2
         })
     })
     .then(response => response.json())  

@@ -54,7 +54,7 @@
         // Si la respuesta es un éxito, redirigir a la página "caja.html"
         if (data.trim() === "Inicio de sesión exitoso.") {
             setTimeout(() => {
-                window.location.href = "caja.html"; // Redirige a caja.html después de un pequeño retraso
+                window.location.href = "caja.html?usuario=" + encodeURIComponent(usuario);
             }, 500); // Esperar medio segundo para asegurar que la respuesta se procese correctamente
         }
     })
