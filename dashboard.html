@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Tickets</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Contenedor Principal */
+        .prefijods_contenedor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* Contadores */
+        .prefijods_contadores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .prefijods_card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .prefijods_numero {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Gráficas */
+        .prefijods_graficas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        canvas {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            max-width: 400px;
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="prefijods_contenedor">
+        <h1>Dashboard de Tickets</h1>
+
+        <!-- Contadores -->
+        <div class="prefijods_contadores">
+            <div class="prefijods_card">
+                <h3>Total Tickets</h3>
+                <div id="totalTickets" class="prefijods_numero">0</div>
+            </div>
+            <div class="prefijods_card">
+                <h3>Tickets Resueltos</h3>
+                <div id="ticketsResueltos" class="prefijods_numero">0</div>
+            </div>
+            <div class="prefijods_card">
+                <h3>Tickets Pendientes</h3>
+                <div id="ticketsPendientes" class="prefijods_numero">0</div>
+            </div>
+        </div>
+
+        <!-- Gráficas -->
+        <div class="prefijods_graficas">
+            <canvas id="graficaEstados"></canvas>
+            <canvas id="graficaCajas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        async function obtenerDatos() {
+            try {
+                const response = await fetch("datos_dashboard.php");
+                if (!response.ok) throw new Error("Error en la respuesta del servidor");
+                const data = await response.json();
+
+                document.getElementById("totalTickets").innerText = data.total_tickets;
+                document.getElementById("ticketsResueltos").innerText = data.tickets_resueltos;
+                document.getElementById("ticketsPendientes").innerText = data.tickets_pendientes;
+
+                crearGraficas(data);
+            } catch (error) {
+                console.error("Error obteniendo datos:", error);
+                alert("No se pudieron cargar los datos del dashboard.");
+            }
+        }
+
+        function crearGraficas(data) {
+            new Chart(document.getElementById("graficaEstados"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Resueltos", "Pendientes"],
+                    datasets: [{
+                        data: [data.tickets_resueltos, data.tickets_pendientes],
+                        backgroundColor: ["#2ecc71", "#e74c3c"]
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById("graficaCajas"), {
+                type: "bar",
+                data: {
+                    labels: Object.keys(data.tickets_por_caja),
+                    datasets: [{
+                        label: "Tickets por Caja",
+                        data: Object.values(data.tickets_por_caja),
+                        backgroundColor: "#3498db"
+                    }]
+                }
+            });
+        }
+
+        obtenerDatos();
+    </script>
+
+</body>
+</html>
